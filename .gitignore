@@ -1,0 +1,4 @@
+*.egg-info
+*__pycache__
+dashboard/static/js
+node_modules
