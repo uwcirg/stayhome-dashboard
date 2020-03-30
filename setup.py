@@ -7,6 +7,8 @@ setup(
     packages=["dashboard"],
     include_package_data=True,
     install_requires=[
-        'Flask'
+        'Flask',
+        'flask-oidc',
+        'requests'
     ]
 )
