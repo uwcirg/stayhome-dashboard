@@ -1,8 +1,14 @@
 import dashboard
-from flask import jsonify, make_response, redirect, render_template
+from flask import (
+    current_app,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+)
 import requests
 
-from dashboard import MAP_API, oidc
+from dashboard import oidc
 
 
 class BearerAuth(requests.auth.AuthBase):
@@ -37,7 +43,7 @@ def patients_list(methods=["GET"]):
     if token is None or not oidc.validate_token(token):
         return redirect('logout')
 
-    url = MAP_API + 'Patient'
+    url = current_app.config.get('MAP_API') + 'Patient'
     params = {'_count': 1000}
     resp = requests.get(url, auth=BearerAuth(token), params=params)
     resp.raise_for_status()
