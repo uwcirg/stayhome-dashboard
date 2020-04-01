@@ -1,5 +1,6 @@
 *.egg-info
 *__pycache__
 client_secrets.json
+dashboard.env
 dashboard/static/js
 node_modules
