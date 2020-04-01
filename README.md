@@ -13,16 +13,17 @@ All views require Keycloak authentication.  Keycloak roles determine authorizati
 5) `nodeenv --python-virtualenv`
 6) `pip install -e .`
 7) `npm install .`
+8) `npm run build`
 
 ### Run
 #
 1) Run the script located in the `dashboard/bin` directory:
    * `dashboard/bin/dashboardrun.sh`
 
-Head over to `localhost:8000`, you should see: **Hi! From cookiecutter-flask-react**
+Head over to `localhost:8000`, you should see a list of patients as a Keycloak user with the `admin` role
 
 Try `localhost:8000/Patient` as a Keycloak user with the `admin` role to see
-a list of all patients.
+a json list of all patients.
 
 ### Resources
 #
