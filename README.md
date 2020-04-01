@@ -9,11 +9,11 @@ All views require Keycloak authentication.  Keycloak roles determine authorizati
 1) `git clone <this repository>`
 2) `cp client_secrets.json.default client_secrets.json`  # Edit to fit
 3) `cp dashboard.env.default dashboard.env`  # Edit to fit
-3) `mkvirtualenv stayhome-dashboard`  # Python 3.7
-4) `pip install nodeenv`
-5) `nodeenv --python-virtualenv`
-6) `pip install -e .`
-7) `npm install .`
+4) `mkvirtualenv stayhome-dashboard`  # Python 3.7
+5) `pip install nodeenv`
+6) `nodeenv --python-virtualenv`
+7) `pip install -e .`
+8) `npm install .`
 
 ### Run
 #
