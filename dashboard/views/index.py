@@ -46,6 +46,20 @@ def patients_list(methods=["GET"]):
 
 @dashboard.app.route('/logout', methods=["GET"])
 def logout(methods=["GET"]):
-    oidc.logout()
+    token = oidc.user_loggedin and oidc.get_access_token()
+    if token and oidc.validate_token(token):
+        # Direct POST to Keycloak necessary to clear KC domain browser cookie
+        logout_uri = oidc.client_secrets['userinfo_uri'].replace(
+            'userinfo', 'logout')
+        data = {
+            'client_id': oidc.client_secrets['client_id'],
+            'client_secret': oidc.client_secrets['client_secret'],
+            'refresh_token': oidc.get_refresh_token()}
+        headers = {'Authorization': f'Bearer {token}'}
+        result = requests.post(logout_uri, headers=headers, data=data)
+        result.raise_for_status()
+
+    oidc.logout()  # clears local cookie only
+
     message = 'logged out.  Return to <a href="/Patient">Patient List</a>'
     return make_response(message)
