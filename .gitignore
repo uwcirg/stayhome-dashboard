@@ -3,4 +3,5 @@
 client_secrets.json
 dashboard/static/js
 dashboard/templates/index.html
+package-lock.json
 node_modules
