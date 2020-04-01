@@ -55,8 +55,7 @@ def logout(methods=["GET"]):
             'client_id': oidc.client_secrets['client_id'],
             'client_secret': oidc.client_secrets['client_secret'],
             'refresh_token': oidc.get_refresh_token()}
-        headers = {'Authorization': f'Bearer {token}'}
-        result = requests.post(logout_uri, headers=headers, data=data)
+        result = requests.post(logout_uri, auth=BearerAuth(token), data=data)
         result.raise_for_status()
 
     oidc.logout()  # clears local cookie only
