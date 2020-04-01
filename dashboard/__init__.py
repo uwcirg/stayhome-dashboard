@@ -1,23 +1,18 @@
+from flask import Flask
 
-import flask
-from flask_oidc import OpenIDConnect
+from dashboard.api import api_blueprint
+from dashboard.extensions import oidc
 
 
 def create_app(testing=False):
-    """Application factory, used to create application
-    """
-    app = flask.Flask(__name__)
+    """Application factory, used to create and configure application"""
+    app = Flask(__name__)
     app.config.from_object('dashboard.config')
 
     if testing is True:
         app.config['SECRET_KEY'] = 'nonsense-testing-key'
         app.config['TESTING'] = True
 
+    oidc.init_app(app)
+    app.register_blueprint(api_blueprint)
     return app
-
-
-app = create_app()
-oidc = OpenIDConnect(app)
-
-# (Reference http://flask.pocoo.org/docs/0.12/patterns/packages/)
-import dashboard.views
