@@ -2,5 +2,5 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 
-// entry point in tutor.html
+// entry point
 ReactDOM.render(<App />, document.getElementById("content"));

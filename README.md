@@ -20,10 +20,10 @@ All views require Keycloak authentication.  Keycloak roles determine authorizati
 1) Run the script located in the `dashboard/bin` directory:
    * `dashboard/bin/dashboardrun.sh`
 
-Head over to `localhost:8000`, you should see: **Hi! From cookiecutter-flask-react**
+Head over to `localhost:8000`, you should see a list of patients as a Keycloak user with the `admin` role
 
 Try `localhost:8000/Patient` as a Keycloak user with the `admin` role to see
-a list of all patients.
+a json list of all patients.
 
 ### Run in docker
 1) `sudo docker-compose build web`
