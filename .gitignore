@@ -1,6 +1,7 @@
 *.egg-info
 *__pycache__
 client_secrets.json
+dashboard.env
 dashboard/static/js
 dashboard/templates/index.html
 package-lock.json
