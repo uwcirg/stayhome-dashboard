@@ -8,11 +8,12 @@ All views require Keycloak authentication.  Keycloak roles determine authorizati
 #
 1) `git clone <this repository>`
 2) `cp client_secrets.json.default client_secrets.json`  # Edit to fit
-3) `mkvirtualenv stayhome-dashboard`
-4) `pip install nodeenv`
-5) `nodeenv --python-virtualenv`
-6) `pip install -e .`
-7) `npm install .`
+3) `cp dashboard.env.default dashboard.env`  # Edit to fit
+4) `mkvirtualenv stayhome-dashboard`  # Python 3.7
+5) `pip install nodeenv`
+6) `nodeenv --python-virtualenv`
+7) `pip install -e .`
+8) `npm install .`
 
 ### Run
 #
@@ -23,6 +24,10 @@ Head over to `localhost:8000`, you should see: **Hi! From cookiecutter-flask-rea
 
 Try `localhost:8000/Patient` as a Keycloak user with the `admin` role to see
 a list of all patients.
+
+### Run in docker
+1) `sudo docker-compose build web`
+2) `sudo docker-compose up -d`
 
 ### Resources
 #
