@@ -8,7 +8,7 @@ usage() {
 Usage:
     $cmdname
 
-    Docker deployment script for web target
+    Docker deployment script
     Pull the latest docker image and recreate relevant containers
 
 USAGE
