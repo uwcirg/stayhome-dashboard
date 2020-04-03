@@ -17,6 +17,13 @@
     background-color: lighten(@primaryColor, 15%) !important;
     border-radius: 2.75rem !important;
 }
+
+#footerContainer {
+    .MuiGrid-spacing-xs-3 {
+        margin-top: -16px !important;
+    }
+}
+
 a.cta {
     color: @ctaLinkColor;
 }
@@ -32,6 +39,7 @@ a.cta {
 }
 .header__logo-img {
     width: 40px;
+    margin-right: 8px;
 }
 .accountsList {
     padding-top: 80px;
@@ -113,25 +121,30 @@ a.cta {
 .ReactTable .rt-thead .rt-th.-sort-asc, .ReactTable .rt-thead .rt-td.-sort-asc {
     box-shadow: none;
 }
-.ReactTable .-pagination .-btn {
+.ReactTable .-pagination {
+    .-btn {
     color: @secondaryColor;
     background: rgb(215, 207, 226);
-}
-.ReactTable .-pagination .-btn:not([disabled]):hover {
+    }
+    .-btn:not([disabled]):hover {
     background: rgb(202, 196, 212);
-}
-input[type=number]:not(.browser-default):focus:not([readonly]) {
-    border-bottom: 1px solid @primaryColor;
-    -webkit-box-shadow: 0 1px 0 0 @primaryColor;
-    box-shadow: 0 1px 0 0 @primaryColor
-}
-.ReactTable .-pagination .-pageJump input {
-    height: 28px;
-}
-.ReactTable .-pagination .-pageInfo {
-    flex: 1;
-    position: relative;
-    top: 2px;
+    }
+    input[type=number]:not(.browser-default):focus:not([readonly]) {
+        border-bottom: 1px solid @primaryColor;
+        -webkit-box-shadow: 0 1px 0 0 @primaryColor;
+        box-shadow: 0 1px 0 0 @primaryColor;
+    }
+    .-pageJump input {
+        height: 32px;
+        position: relative;
+    }
+    select {
+        height: 32px;
+    }
+    .-pageInfo {
+        flex: 1;
+        position: relative;
+    }
 }
 .loading {
     display: flex;
