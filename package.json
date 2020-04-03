@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "build": "webpack -p --progress --config webpack.config.js",
-    "dev-build": "webpack --progress -d --config webpack.config.js",
-    "watch": "webpack --progress -d --config webpack.config.js --watch",
+    "dev-build": "webpack --progress  --debug --config webpack.config.js",
+    "watch": "webpack --progress  --debug --config webpack.config.js --watch",
     "report": "npm run build && webpack --profile --json > report.json && webpack-bundle-analyzer report.json  ./dashboard/static/js  -m static"
   },
   "dependencies": {
