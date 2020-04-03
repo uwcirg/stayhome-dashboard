@@ -10,3 +10,5 @@ services:
       - ${EXTERNAL_PORT:-8000}:8000
     env_file:
       - dashboard.env
+    volumes:
+      - ./client_secrets.json:/opt/stayhome-dashboard/client_secrets.json:ro
