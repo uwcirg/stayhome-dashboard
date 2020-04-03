@@ -5,7 +5,7 @@
     "build": "webpack -p --progress --config webpack.config.js",
     "dev-build": "webpack --progress -d --config webpack.config.js",
     "watch": "webpack --progress -d --config webpack.config.js --watch",
-    "report": "webpack --profile --json > report.json && webpack-bundle-analyzer report.json  ./dashboard/static/js  -m static"
+    "report": "npm run build && webpack --profile --json > report.json && webpack-bundle-analyzer report.json  ./dashboard/static/js  -m static"
   },
   "dependencies": {
     "@babel/core": "7.2.2",
