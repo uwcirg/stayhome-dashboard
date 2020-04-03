@@ -14,6 +14,7 @@ jobs:
         # todo: pin to hash
         uses: elgohr/Publish-Docker-Github-Action@master
         with:
+          # https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions
           name: ${{ github.repository }}
           # configured at repo settings/secrets
           username: ${{ secrets.DOCKER_USERNAME }}
