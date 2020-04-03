@@ -1,5 +1,6 @@
 import React from "react";
 import ReactTable from 'react-table-6';
+import 'react-table-6/react-table.css';
 import {sendRequest, dateFormat} from './Utility';
 
 export default class Table extends React.Component {
@@ -54,7 +55,7 @@ export default class Table extends React.Component {
       const cellClass = "mdc-data-table__cell";
       return (
               <div className="accountsList">
-                <h5>Accounts List <span className="count">({this.state.total + ' entries'})</span></h5>
+                <h2>Accounts List <span className="count">({this.state.total + ' entries'})</span></h2>
                 <div className={`tableWrapper ${loadingClass}`}>
                   <div className={`loading ${loadingClass?'':'hide'}`}>
                     <div className="loader"></div>

@@ -8,7 +8,7 @@ import Link from '@material-ui/core/Link';
 export default class Footer extends Component {
   render() {
       return (
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" id="footerContainer">
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={6}>
                     <Box pt={4}>
