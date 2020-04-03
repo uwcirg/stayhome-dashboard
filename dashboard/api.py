@@ -22,6 +22,7 @@ def main(methods=["GET"]):
     token = oidc.get_access_token()
     if token is None or not oidc.validate_token(token):
         return redirect('logout')
+    # todo use send_from_directory
     return render_template('index.html')
 
 
