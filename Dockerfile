@@ -20,7 +20,6 @@ WORKDIR /opt/stayhome-dashboard
 # Copy front-end files built in previous stage
 COPY --from=frontend /tmp/frontend/dashboard/static/js/ /opt/stayhome-dashboard/dashboard/static/js/
 COPY --from=frontend /tmp/frontend/dashboard/templates/ /opt/stayhome-dashboard/dashboard/templates/
-COPY --from=frontend /tmp/frontend/node_modules/ /opt/stayhome-dashboard/node_modules/
 
 ENV FLASK_APP=dashboard:create_app
 
