@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh -eu
 
 repo_path="$(cd "$(dirname "$0")" && pwd)"
 cmdname="$(basename "$0")"
