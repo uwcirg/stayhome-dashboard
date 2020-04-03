@@ -54,15 +54,6 @@ const config = {
         title: "StayHome Dashboard",
         template: path.join(__dirname, '/dashboard/static/src/index.html'),
         filename: path.join(__dirname, '/dashboard/templates/index.html')
-      }),
-      /*
-       * navigate to [server name/dev instance]/static/public/dashboard_bundles_report.html to view analysis after a build
-       */
-      new BundleAnalyzerPlugin({
-        analyzerMode: "static",
-        statsFilename: "dashboard_bundles.json",
-        generateStatsFile: true,
-        reportFilename: path.join(__dirname, '/dashboard/static/public/dashboard_bundles_report.html')
       })
     ],
     optimization: {
