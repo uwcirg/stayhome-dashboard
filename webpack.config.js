@@ -15,6 +15,11 @@ const config = {
     },
     module: {
         rules: [
+          //parse css files
+          {
+            test: /\.css$/,
+            loader:[ 'style-loader', 'css-loader']
+          },
           {
             test: /\.(png|jpe?g|gif)$/i,
             loader: 'url-loader'
