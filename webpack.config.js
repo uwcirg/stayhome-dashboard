@@ -3,6 +3,7 @@ const path = require('path');
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const config = {
     entry:  path.join(__dirname, '/dashboard/static/src/js/Index.js'),
@@ -53,6 +54,15 @@ const config = {
         title: "StayHome Dashboard",
         template: path.join(__dirname, '/dashboard/static/src/index.html'),
         filename: path.join(__dirname, '/dashboard/templates/index.html')
+      }),
+      /*
+       * navigate to [server name/dev instance]/static/public/dashboard_bundles_report.html to view analysis after a build
+       */
+      new BundleAnalyzerPlugin({
+        analyzerMode: "static",
+        statsFilename: "dashboard_bundles.json",
+        generateStatsFile: true,
+        reportFilename: path.join(__dirname, '/dashboard/static/public/dashboard_bundles_report.html')
       })
     ],
     optimization: {

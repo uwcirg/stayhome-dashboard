@@ -4,5 +4,6 @@ client_secrets.json
 dashboard.env
 dashboard/static/js
 dashboard/templates/index.html
+dashboard/static/public/dashboard_bundles_report.html
 package-lock.json
 node_modules
