@@ -10,7 +10,9 @@ export default class Table extends React.Component {
         data: [],
         loading: true,
         pages: 0,
-        total: 0
+        total: 0,
+        hasError: false,
+        errorMessage: ""
       };
   }
   componentDidMount() {
@@ -44,10 +46,10 @@ export default class Table extends React.Component {
             });
         });
       }
-      this.setState({ data: dataSet, total: dataSet.length, loading: false });
-    }, function(error) {
-      console.error("Failed!", error);
-      this.setState({loading: false});
+      this.setState({ data: dataSet, total: dataSet.length, loading: false, hasError: false });
+    }, error => {
+      console.error("Failed! ", error);
+      this.setState({loading: false, hasError: true, errorMessage: `Failed to retrieve data: ${error}`});
     });
   }
   render() {
@@ -60,6 +62,7 @@ export default class Table extends React.Component {
                   <div className={`loading ${loadingClass?'':'hide'}`}>
                     <div className="loader"></div>
                   </div>
+                  <div className={`error-message ${this.state.hasError?'show':'hide'}`}>{this.state.errorMessage}</div>
                   <ReactTable
                       data={this.state.data}
                       columns={[

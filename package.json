@@ -1,10 +1,13 @@
 {
   "name": "stayhome_dashboard",
   "version": "1.0.0",
+  "description": "Dashboard for StayHome application",
+  "license": "BSD-Source-Code",
   "scripts": {
-    "build": "webpack -p --progress --config webpack.config.js",
-    "dev-build": "webpack --progress -d --config webpack.config.js",
-    "watch": "webpack --progress -d --config webpack.config.js --watch"
+    "build": "webpack --config webpack.config.js",
+    "dev-build": "webpack --debug --config webpack.config.js",
+    "watch": "webpack --debug --config webpack.config.js --watch",
+    "report": "npm run build && webpack --profile --json > report.json && webpack-bundle-analyzer report.json  ./dashboard/static/js  -m static"
   },
   "dependencies": {
     "@babel/core": "7.2.2",

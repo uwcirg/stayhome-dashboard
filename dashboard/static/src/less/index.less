@@ -2,10 +2,21 @@
 @ctaLinkColor: darken(@primaryColor, 10%); 
 @secondaryColor: #443854;
 @bylineTextColor: #8e8585;
+@errorColor: red;
+
+.error-message {
+    color: @errorColor;
+    font-weight: 500;
+    font-size: 1.25em;
+}
 .accountsList {
     padding-right: 16px;
     padding-left: 16px;
     padding-top: 8px;
+    .error-message {
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
 }
 .MuiAppBar-colorPrimary {
     background-color: @primaryColor !important;
