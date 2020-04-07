@@ -46,7 +46,7 @@ export default class Table extends React.Component {
             });
         });
       }
-      this.setState({ data: dataSet, total: dataSet.length, loading: false, hasError: false });
+      this.setState({ data: dataSet, total: dataSet.length, loading: false, hasError: false, errorMessage: "" });
     }, error => {
       console.error("Failed! ", error);
       this.setState({loading: false, hasError: true, errorMessage: `Failed to retrieve data: ${error}`});
