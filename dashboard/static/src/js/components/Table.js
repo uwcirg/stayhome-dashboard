@@ -48,8 +48,8 @@ export default class Table extends React.Component {
       }
       this.setState({ data: dataSet, total: dataSet.length, loading: false, hasError: false, errorMessage: "" });
     }, error => {
-      console.error("Failed! ", errorStatusText);
       let errorMessage = error.statusText ? error.statusText: error;
+      console.log("Failed ", errorMessage);
       if (error.status && error.status == 401) {
         errorMessage = "You are not yet authorized to use the Dashboard application. Contact the person responsible for granting your access permissions.";
       }
