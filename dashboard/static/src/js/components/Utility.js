@@ -15,7 +15,7 @@ export function sendRequest (url) {
       else {
         // Otherwise reject with the status text
         // which will hopefully be a meaningful error
-        reject(Error(req.statusText));
+        reject(req);
       }
     };
 

@@ -10,7 +10,9 @@ export default class Table extends React.Component {
         data: [],
         loading: true,
         pages: 0,
-        total: 0
+        total: 0,
+        hasError: false,
+        errorMessage: ""
       };
   }
   componentDidMount() {
@@ -44,10 +46,14 @@ export default class Table extends React.Component {
             });
         });
       }
-      this.setState({ data: dataSet, total: dataSet.length, loading: false });
-    }, function(error) {
-      console.error("Failed!", error);
-      this.setState({loading: false});
+      this.setState({ data: dataSet, total: dataSet.length, loading: false, hasError: false, errorMessage: "" });
+    }, error => {
+      let errorMessage = error.statusText ? error.statusText: error;
+      console.log("Failed ", errorMessage);
+      if (error.status && error.status == 401) {
+        errorMessage = "You are not yet authorized to use the Dashboard application. Contact the person responsible for granting your access permissions.";
+      }
+      this.setState({loading: false, hasError: true, errorMessage: errorMessage});
     });
   }
   render() {
@@ -60,6 +66,7 @@ export default class Table extends React.Component {
                   <div className={`loading ${loadingClass?'':'hide'}`}>
                     <div className="loader"></div>
                   </div>
+                  <div className={`error-message ${this.state.hasError?'show':'hide'}`}>{this.state.errorMessage}</div>
                   <ReactTable
                       data={this.state.data}
                       columns={[
@@ -68,7 +75,7 @@ export default class Table extends React.Component {
                               accessor: "id",
                               sortable: true,
                               className: `${cellClass}`,
-                              maxWidth: 72,
+                              maxWidth: 80,
                               sortMethod: (a, b) => {
                                 if (a == b) {
                                   return 0;
