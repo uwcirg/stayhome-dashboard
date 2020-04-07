@@ -48,8 +48,12 @@ export default class Table extends React.Component {
       }
       this.setState({ data: dataSet, total: dataSet.length, loading: false, hasError: false, errorMessage: "" });
     }, error => {
-      console.error("Failed! ", error);
-      this.setState({loading: false, hasError: true, errorMessage: `Failed to retrieve data: ${error}. Make sure that you have obtained the necessary roles needed for dashboard access.`});
+      console.error("Failed! ", errorStatusText);
+      let errorMessage = error.statusText ? error.statusText: error;
+      if (error.status && error.status == 401) {
+        errorMessage = "You are not yet authorized to use the Dashboard application. Contact the person responsible for granting your access permissions.";
+      }
+      this.setState({loading: false, hasError: true, errorMessage: errorMessage});
     });
   }
   render() {
@@ -71,7 +75,7 @@ export default class Table extends React.Component {
                               accessor: "id",
                               sortable: true,
                               className: `${cellClass}`,
-                              maxWidth: 72,
+                              maxWidth: 80,
                               sortMethod: (a, b) => {
                                 if (a == b) {
                                   return 0;

@@ -1,4 +1,5 @@
 from flask import (
+    abort,
     Blueprint,
     current_app,
     jsonify,
@@ -42,7 +43,11 @@ def patients_list(methods=["GET"]):
     url = current_app.config.get('MAP_API') + 'Patient'
     params = {'_count': 1000}
     resp = requests.get(url, auth=BearerAuth(token), params=params)
-    resp.raise_for_status()
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        abort(err.response.status_code, err)
+
     return jsonify(resp.json())
 
 
