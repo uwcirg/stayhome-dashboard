@@ -19,6 +19,48 @@ export default class Table extends Component {
       };
   }
   componentDidMount() {
+    this.getData();
+    // sendRequest("./Patient").then(response => {
+    //   let rawData = {};
+    //   if (response) {
+    //     rawData = JSON.parse(response);
+    //   }
+    //   let dataSet = [];
+    //   if (rawData["entry"]) {   
+    //     (rawData["entry"]).forEach(function(item) {
+    //         var nameNode = item.resource && item.resource.name ? item.resource.name[0] : null;
+    //         var firstName = nameNode && nameNode.given ? nameNode.given: "";
+    //         var lastName = nameNode && nameNode.family ? nameNode.family: "";
+    //         var fullName = [firstName, lastName].join(" ");
+    //         var telecomeNode = item.resource && item.resource.telecom? item.resource.telecom : null;
+    //         var email = "";
+    //         var lastUpdated = item.resource && item.resource.meta && item.resource.meta["lastUpdated"] ? dateFormat(item.resource.meta["lastUpdated"]) : "--";
+    //         if (telecomeNode) {
+    //             telecomeNode.forEach(function(item) {
+    //                 if (!email && item.system == "email") {
+    //                     email = item.value;
+    //                 }
+    //             });
+    //         }
+    //         dataSet.push({
+    //             id: item.resource.id,
+    //             name: fullName,
+    //             email: email,
+    //             lastUpdated: lastUpdated
+    //         });
+    //     });
+    //   }
+    //   this.setState({ data: dataSet, total: dataSet.length, loading: false, hasError: false, errorMessage: "" });
+    // }, error => {
+    //   let errorMessage = error.statusText ? error.statusText: error;
+    //   console.log("Failed ", errorMessage);
+    //   if (error.status && error.status == 401) {
+    //     errorMessage = "You are not yet authorized to use the Dashboard application. Contact the person responsible for granting your access permissions.";
+    //   }
+    //   this.setState({loading: false, hasError: true, errorMessage: errorMessage});
+    // });
+  }
+  getData() {
     sendRequest("./Patient").then(response => {
       let rawData = {};
       if (response) {
@@ -64,7 +106,7 @@ export default class Table extends Component {
       const cellClass = "mdc-data-table__cell";
       return (
               <div className="accountsList">
-                <h2>Accounts List <span className="count">({this.state.total + ' entries'})</span></h2>
+                <h2>Accounts List <span className="count">({`${this.state.total} entries`})</span></h2>
                 <div className={`tableWrapper ${loadingClass}`}>
                   <div className={`loading ${loadingClass?'':'hide'}`}>
                     <div className="loader"></div>
@@ -137,7 +179,7 @@ export default class Table extends Component {
                                 // console.log('row detail: ', rowInfo.row, ' id:', rowInfo.row.id, ' email:', rowInfo.row.email)
                                 // console.log('It was in this table instance:', instance)
                                 this.setState({currentPatient: rowInfo.row});
-                                document.querySelector("#modalPlaceholderButton").click();
+                                document.querySelector("#profilePlaceholderButton").click();
                               }
                             }
                           }}

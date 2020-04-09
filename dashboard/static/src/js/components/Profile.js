@@ -66,7 +66,7 @@ export default function ProfileDialog(props) {
 
   return (
     <div>
-      <Button id="modalPlaceholderButton" variant="outlined" className="hide" color="primary" onClick={handleOpen}></Button>
+      <Button id="profilePlaceholderButton" variant="outlined" className="hide" color="primary" onClick={handleOpen}></Button>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>

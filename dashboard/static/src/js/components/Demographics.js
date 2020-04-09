@@ -28,8 +28,8 @@ export default class Demographics extends Component {
               return false;
           }
           let dataSet = {};
-          dataSet["birth_date"] = rawData.birthDate ? dateFormat(rawData.birthDate) : "";
-          dataSet["gender"] = rawData.gender;
+          dataSet["Birth_date"] = rawData.birthDate ? dateFormat(rawData.birthDate) : "";
+          dataSet["Gender"] = rawData.gender;
           dataSet.phone = "";
           if (rawData.telecom) {
               const teleResult = (rawData.telecom).filter(item => item.system == "phone");
@@ -37,15 +37,15 @@ export default class Demographics extends Component {
                 dataSet.phone = teleResult[0].value;
               }
           }
-          dataSet["primary_zipcode"] = "";
+          dataSet["Primary_zipcode"] = "";
           if (rawData.address) {
               const homeAddress = (rawData.address).filter(item => item.use == "home");
               if (homeAddress.length) {
-                dataSet["primary_zipcode"] = homeAddress[0].postalCode;
+                dataSet["Primary_zipcode"] = homeAddress[0].postalCode;
               }
               const secondaryAddress = (rawData.address).filter(item => !item.use);
               if (secondaryAddress.length) {
-                dataSet["secondary_zipcode"] = secondaryAddress[0].postalCode;
+                dataSet["Secondary_zipcode"] = secondaryAddress[0].postalCode;
               }
           }
           this.setState({coreInfo: dataSet, errorMessage: ""});
@@ -55,22 +55,30 @@ export default class Demographics extends Component {
           this.setState({errorMessage: `Error retrieving demographics data: ${errorMessage}`});
         });
       }
+    renderProfileLabel(label) {
+        return (<InputLabel required={false} shrink={true} className="profile-label">{label.replace(/\_/g, " ")}</InputLabel>);
+    }
+    renderProfileText(text) {
+        return (<span>{text && String(text).trim() ? text: NO_TEXT}</span>);
+    }
     render() {
         const {info} = this.props;
         return (
             <div className="demographics-container">
-                <InputLabel required={false} shrink={true} className="profile-label">Name</InputLabel><span>{info.name && String(info.name).trim() ? info.name: NO_TEXT}</span>
+                {this.renderProfileLabel("Name")}
+                {this.renderProfileText(info.name)}
                 <Divider/>
-                <InputLabel required={false} shrink={true} className="profile-label">Email</InputLabel><span>{info.email || NO_TEXT}</span>
-                <Divider></Divider>
+                {this.renderProfileLabel("Email")}
+                {this.renderProfileText(info.email)}
+                <Divider />
                 {
 
                     Object.entries(this.state.coreInfo).map((item, index) => {
                         let itemContent = this.state.coreInfo[item[0]];
                         return (   
                             <section key={index}>
-                                <InputLabel required={false} shrink={true} className="profile-label">{item[0].replace(/\_/g, " ")}</InputLabel>
-                                <div>{itemContent && String(itemContent).trim()? itemContent : NO_TEXT}</div>
+                                {this.renderProfileLabel(item[0])}
+                                {this.renderProfileText(itemContent)}
                                 <Divider></Divider>
                             </section>
                         )
