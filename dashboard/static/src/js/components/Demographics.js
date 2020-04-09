@@ -48,7 +48,6 @@ export default class Demographics extends Component {
                 dataSet["secondary_zipcode"] = secondaryAddress[0].postalCode;
               }
           }
-          console.log(" data ? ", dataSet);
           this.setState({coreInfo: dataSet, errorMessage: ""});
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;

@@ -128,13 +128,14 @@ export default class Table extends Component {
                           getTdProps={(state, rowInfo, column, instance) => {
                             return {
                               onClick: (e, handleOriginal) => {
-                                console.log("state ", state)
-                                console.log('A Td Element was clicked!')
-                                console.log('it produced this event:', e)
-                                console.log('It was in this column:', column)
-                                console.log('It was in this row:', rowInfo)
-                                console.log('row detail: ', rowInfo.row, ' id:', rowInfo.row.id, ' email:', rowInfo.row.email)
-                                console.log('It was in this table instance:', instance)
+                                //debugging
+                                // console.log("state ", state)
+                                // console.log('A Td Element was clicked!')
+                                // console.log('it produced this event:', e)
+                                // console.log('It was in this column:', column)
+                                // console.log('It was in this row:', rowInfo)
+                                // console.log('row detail: ', rowInfo.row, ' id:', rowInfo.row.id, ' email:', rowInfo.row.email)
+                                // console.log('It was in this table instance:', instance)
                                 this.setState({currentPatient: rowInfo.row});
                                 document.querySelector("#modalPlaceholderButton").click();
                               }
