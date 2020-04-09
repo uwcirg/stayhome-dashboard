@@ -1,11 +1,12 @@
 from flask import (
-    abort,
     Blueprint,
+    abort,
     current_app,
     jsonify,
     make_response,
     redirect,
     render_template,
+    request,
 )
 import requests
 
@@ -27,22 +28,44 @@ def main(methods=["GET"]):
     return render_template('index.html')
 
 
-@api_blueprint.route('/Patient', methods=["GET"])
+@api_blueprint.route('/<string:resource_type>', methods=["GET"])
 @oidc.require_login
-def patients_list(methods=["GET"]):
-    """ Crude demo for direct access to HAPI Patient list
+def resource_bundle(resource_type, methods=["GET"]):
+    """Query HAPI for resource_type and return as JSON FHIR Bundle
 
-    NB - the Keycloak user must possess the `admin` role (set w/i Keycloak UI)
-    to view all patients.
+    :param resource_type: The FHIR Resource type, i.e. `Patient` or `CarePlan`
+    :param search criteria: Include query string arguments to pass to HAPI
+      as additional search criteria.  Example: /CarePlan?subject=Patient/8
 
     """
     token = oidc.get_access_token()
     if token is None or not oidc.validate_token(token):
         return redirect('logout')
 
-    url = current_app.config.get('MAP_API') + 'Patient'
+    url = current_app.config.get('MAP_API') + resource_type
     params = {'_count': 1000}
+    params.update(request.args)
     resp = requests.get(url, auth=BearerAuth(token), params=params)
+    try:
+        resp.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        abort(err.response.status_code, err)
+
+    return jsonify(resp.json())
+
+
+@api_blueprint.route(
+    '/<string:resource_type>/<int:resource_id>', methods=["GET"])
+@oidc.require_login
+def resource_by_id(resource_type, resource_id, methods=["GET"]):
+    """Query HAPI for individual resource; return JSON FHIR Resource
+    """
+    token = oidc.get_access_token()
+    if token is None or not oidc.validate_token(token):
+        return redirect('logout')
+
+    url = f"{current_app.config.get('MAP_API')}{resource_type}/{resource_id}"
+    resp = requests.get(url, auth=BearerAuth(token))
     try:
         resp.raise_for_status()
     except requests.exceptions.HTTPError as err:
