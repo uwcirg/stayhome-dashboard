@@ -1,9 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Slide from '@material-ui/core/Slide';
 import Tabs from '@material-ui/core/Tabs';
@@ -12,6 +12,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Demographics from './Demographics';
 import CarePlan from "./CarePlan";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="right" ref={ref} {...props} timeout={350}/>;
+});
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -22,10 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="right" ref={ref} {...props} timeout={350}/>;
-});
-
+  
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -44,9 +45,9 @@ function TabPanel(props) {
 }
 
 export default function ProfileDialog(props) {
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [tabValue, setTabValue] = React.useState(0);
+  const classes = useStyles();
   let {info} = props;
  
   const handleOpen = () => {
@@ -66,7 +67,7 @@ export default function ProfileDialog(props) {
 
   return (
     <div>
-      <Button id="profilePlaceholderButton" variant="outlined" className="hide" color="primary" onClick={handleOpen}></Button>
+      <Button id="profilePlaceholderButton" variant="outlined" className="hide" color="primary" onClick={handleOpen}>Profile</Button>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
@@ -91,13 +92,9 @@ export default function ProfileDialog(props) {
             <Tab label="Questionnaires" />
           </Tabs>
         </Paper>
-        <TabPanel value={tabValue} index={0}>
-          <Demographics info={info}></Demographics>
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-          <CarePlan userId={info.id} />
-        </TabPanel>
-        <Box className="profile-footer"><Button variant="outlined" onClick={handleClose}>Back to Accounts List</Button></Box>
+        <TabPanel value={tabValue} index={0} children={<Demographics info={info}></Demographics>} />
+        <TabPanel value={tabValue} index={1} children={<CarePlan userId={info.id} />} />
+        <Box className="profile-footer" children={<Button variant="outlined" onClick={handleClose}>Back to Accounts List</Button>}></Box>
       </Dialog>
     </div>
   );

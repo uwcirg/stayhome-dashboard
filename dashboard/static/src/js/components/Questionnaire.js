@@ -72,11 +72,11 @@ export default class Questionnaire extends Component {
     render() {
         let getAnswerItems = (items) => {
           let answerItems = [];
-          (items).forEach(item => {
+          (items).forEach((item, key) => {
             let linkId = item.linkId;
             let arrAnswer = this.state.answers.filter(subitem => subitem.linkId == linkId);
             if (arrAnswer.length) {
-              answerItems.push(<div className="content"><span className="question-text muted-text">{`${item.text}:`}</span><span>{arrAnswer[0].answer || '--'}</span></div>);
+              answerItems.push(<p className="content" key={key}><span className="question-text muted-text">{`${item.text}:`}</span><span>{arrAnswer[0].answer || '--'}</span></p>);
             }
           });
           return answerItems;
@@ -89,14 +89,12 @@ export default class Questionnaire extends Component {
                 aria-controls={`panel${key}-content`}
                 id={`panel${key}-header`}
               >
-              <Typography>{item.title}</Typography>
+              {item.title}
               </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <Typography>
+              <ExpansionPanelDetails className="questionnaire-detail-summary">
                 {
                   getAnswerItems(item.items)
                 }
-                </Typography>
               </ExpansionPanelDetails>
             </ExpansionPanel>
           )
