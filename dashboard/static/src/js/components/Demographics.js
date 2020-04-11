@@ -21,6 +21,7 @@ export default class Demographics extends Component {
                 rawData = JSON.parse(response);
             } catch(e) {
                 console.log("Error parsing questionnaire json: ", e);
+                this.setState({errorMessage: `Error retrieving demographics data: ${e}`});
                 rawData = null;
             }
           }
