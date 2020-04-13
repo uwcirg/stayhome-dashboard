@@ -4,7 +4,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import InputLabel from '@material-ui/core/InputLabel';
-import Typography from '@material-ui/core/Typography';
 import Error from './Error';
 import {sendRequest} from './Utility';
 
@@ -15,7 +14,8 @@ export default class Questionnaire extends Component {
             questions: [],
             answers: [],
             loading: true,
-            errorMessage: ""
+            errorMessage: "",
+            mounted: false
         };
     }
     componentDidMount() {
@@ -62,11 +62,11 @@ export default class Questionnaire extends Component {
                 dataSet["questions"].push(qItem);
               }
           });
-          this.setState({questions: dataSet["questions"], answers: dataSet["answers"],loading: false, errorMessage: ""});
+          this.setState({questions: dataSet["questions"], answers: dataSet["answers"],loading: false, errorMessage: "", mounted: true});
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
-          this.setState({loading: false, errorMessage: errorMessage});
+          this.setState({loading: false, errorMessage: errorMessage, mounted: false});
         });
     }
     render() {

@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 import InputLabel from '@material-ui/core/InputLabel';
 import Divider from '@material-ui/core/Divider';
 import Error from './Error';
@@ -10,7 +11,8 @@ export default class Demographics extends Component {
         super(...arguments);
         this.state = {
             coreInfo: {},
-            errorMessage: ""
+            errorMessage: "",
+            mounted: false,
         };
     }
     componentDidMount() {
@@ -21,7 +23,7 @@ export default class Demographics extends Component {
                 rawData = JSON.parse(response);
             } catch(e) {
                 console.log("Error parsing questionnaire json: ", e);
-                this.setState({errorMessage: `Error retrieving demographics data: ${e}`});
+                this.setState({errorMessage: `Error retrieving demographics data: ${e}`, mounted: false});
                 rawData = null;
             }
           }
@@ -49,11 +51,11 @@ export default class Demographics extends Component {
                 dataSet["Secondary_zipcode"] = secondaryAddress[0].postalCode;
               }
           }
-          this.setState({coreInfo: dataSet, errorMessage: ""});
+          this.setState({coreInfo: dataSet, errorMessage: "", mounted: true});
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
-          this.setState({errorMessage: `Error retrieving demographics data: ${errorMessage}`});
+          this.setState({errorMessage: `Error retrieving demographics data: ${errorMessage}`, mounted: false});
         });
       }
     renderProfileLabel(label) {
@@ -67,10 +69,10 @@ export default class Demographics extends Component {
         return (
             <div className="demographics-container">
                 {this.renderProfileLabel("Name")}
-                {this.renderProfileText(info.name)}
+                {this.renderProfileText(info.name?info.name:"")}
                 <Divider/>
                 {this.renderProfileLabel("Email")}
-                {this.renderProfileText(info.email)}
+                {this.renderProfileText(info.email?info.email:"")}
                 <Divider />
                 {
 
@@ -90,3 +92,7 @@ export default class Demographics extends Component {
         );
     }
 }
+Demographics.propTypes = {
+    info: PropTypes.object.isRequired
+};
+

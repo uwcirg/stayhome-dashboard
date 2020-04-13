@@ -68,7 +68,7 @@ export default function ProfileDialog(props) {
   return (
     <div>
       <Button id="profilePlaceholderButton" variant="outlined" className="hide" color="primary" onClick={handleOpen}>Profile</Button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog id="profileDiaglog" fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
@@ -99,3 +99,4 @@ export default function ProfileDialog(props) {
     </div>
   );
 }
+

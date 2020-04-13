@@ -11,7 +11,8 @@ export default class CarePlan extends Component {
         this.state = {
             coreInfo: [],
             loading: true,
-            errorMessage: ""
+            errorMessage: "",
+            mounted: false
         };
     }
     componentDidMount() {
@@ -23,6 +24,7 @@ export default class CarePlan extends Component {
             } catch(e) {
               console.log("error parsing response! ", e);
               rawData = null;
+              this.setState({loading: false, errorMessage: e, mounted: false});
             }
             
           }
@@ -46,11 +48,11 @@ export default class CarePlan extends Component {
               description: `Care plan: ${resource.description}`
             })
           });
-          this.setState({coreInfo: dataSet, loading: false, errorMessage: ""});
+          this.setState({coreInfo: dataSet, loading: false, errorMessage: "", mounted: true});
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
-          this.setState({loading: false, errorMessage: errorMessage});
+          this.setState({loading: false, errorMessage: errorMessage, mounted: false});
         });
       }
     render() {
@@ -70,7 +72,7 @@ export default class CarePlan extends Component {
           )
         });
         return (
-            <div className="questionnaire-container">
+            <div className="careplan-container questionnaire-container">
               <Error message={this.state.errorMessage} className={`error-message ${this.state.errorMessage?'show':'hide'}`}></Error>
               <div className={this.state.loading?"loading":"hide"}>
                 <div className="loader"></div>
