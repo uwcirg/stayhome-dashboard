@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "dev-build": "webpack --debug --config webpack.config.js",
-    "watch": "webpack -debug --config webpack.config.js --watch",
+    "watch": "webpack -debug --config webpack.config.js --watch --progress",
     "test": "jest",
     "test:watch": "jest --watch",
     "report": "npm run build && webpack --profile --json > report.json && webpack-bundle-analyzer report.json  ./dashboard/static/js  -m static"

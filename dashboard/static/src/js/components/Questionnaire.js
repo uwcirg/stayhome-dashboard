@@ -29,7 +29,14 @@ export default class Questionnaire extends Component {
     }
     componentDidMount() {
         this.__mounted = true;
-        sendRequest(`./QuestionnaireResponse?based-on=${this.props.carePlanId}&_include=QuestionnaireResponse:questionnaire`).then(response => {
+        let queryParamsObj =  [{"based-on": this.props.carePlanId},{"_include":"QuestionnaireResponse:questionnaire"}];
+        let getQueryParams = (params) => {
+          if (!params) return "";
+          return (params.map((item) => {
+            return Object.entries(item)[0].join("=");
+          })).join("&");
+        };
+        sendRequest(`./QuestionnaireResponse?${getQueryParams(queryParamsObj)}`).then(response => {
           let rawData = {};
           if (response) {
             try {
@@ -120,9 +127,7 @@ export default class Questionnaire extends Component {
               <div className={this.state.loading?"hide":"show"}>
                 <InputLabel required={false} shrink={true} className="profile-label">Questionnaire list</InputLabel>
                 <div className="questionnaire-list">
-                  {
-                    items
-                  }
+                {items}
                 </div>
                 {!this.state.loading && !items.length && !this.state.errorMessage && <div>No data available</div>}
               </div>

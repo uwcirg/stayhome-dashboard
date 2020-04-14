@@ -34,7 +34,7 @@ export default class CarePlan extends Component {
           } catch(e) {
             console.log("error parsing response! ", e);
             this.setCurrentState({loading: false, errorMessage: e});
-            return;
+            return false;
           }
           
         }
@@ -56,7 +56,7 @@ export default class CarePlan extends Component {
               end: resource.period && resource.period.end ? dateFormat(resource.period.end) : "",
             },
             description: `Care plan: ${resource.description}`
-          })
+          });
         });
         this.setCurrentState({coreInfo: dataSet, loading: false, errorMessage: ""});
       }, error => {

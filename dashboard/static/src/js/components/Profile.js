@@ -63,7 +63,7 @@ export default function ProfileDialog(props) {
     setTabValue(newValue);
   };
 
-  const title = `Profile for ${info.email?info.email: '#'+info.id}`
+  const title = `Profile for ${info.email?info.email: '#'+info.id}`;
 
   return (
     <div>
@@ -99,4 +99,3 @@ export default function ProfileDialog(props) {
     </div>
   );
 }
-

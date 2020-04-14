@@ -6,6 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
     entry:  path.join(__dirname, '/dashboard/static/src/js/Index.js'),
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000
+    },
     output: {
       path: path.join(__dirname, '/dashboard/static/js/'),
       filename: 'app.bundle.js',
