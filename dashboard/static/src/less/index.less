@@ -3,6 +3,8 @@
 @secondaryColor: #443854;
 @bylineTextColor: #8e8585;
 @errorColor: red;
+@mutedColor: #777;
+@muterColor: #ececec;
 
 .error-message {
     color: @errorColor;
@@ -21,12 +23,29 @@
 .MuiAppBar-colorPrimary {
     background-color: @primaryColor !important;
 }
+.MuiTab-textColorPrimary.Mui-selected {
+    color: darken(@primaryColor, 20%) !important;
+}
 .MuiTypography-colorTextSecondary {
     color: @secondaryColor !important;
 }
-.MuiButton-containedPrimary {
+.MuiButton-containedPrimary, .btn-primary {
     background-color: lighten(@primaryColor, 15%) !important;
     border-radius: 2.75rem !important;
+}
+.MuiButton-outlined {
+    border-radius: 2.75rem !important;
+}
+.MuiButton-text {
+    padding: 6px 16px !important;
+}
+.MuiExpansionPanel-rounded:last-child {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+.MuiExpansionPanel-rounded:first-child {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
 }
 
 #footerContainer {
@@ -54,6 +73,9 @@ a.cta {
 }
 .accountsList {
     padding-top: 80px;
+}
+#profilePlaceholderButton {
+    display: none !important;
 }
 .mdc-top-app-bar {
     background-color: @primaryColor;
@@ -132,6 +154,9 @@ a.cta {
 .ReactTable .rt-thead .rt-th.-sort-asc, .ReactTable .rt-thead .rt-td.-sort-asc {
     box-shadow: none;
 }
+.ReactTable .rt-tr {
+    cursor: pointer;
+}
 .ReactTable .-pagination {
     .-btn {
     color: @secondaryColor;
@@ -199,6 +224,78 @@ a.cta {
     animation: spin 2s linear infinite;
 }
 
+.profile-label {
+    margin-top: 24px;
+}
+
+.demographics-container {
+    margin-top: -12px;
+    .profile-label:first-of-type {
+        margin-top: 16px;
+    }
+}
+.questionnaire-container {
+    section {
+        margin-top: 24px;
+    }
+    section:first-of-type {
+        margin-top: 0;
+    }
+    label {
+        margin-top: 8px;
+    }
+    .title {
+        font-weight: 500;
+    }
+}
+.questionnaire-panel {
+    .MuiCollapse-wrapper {
+        margin-top: -12px !important;
+    }
+}
+
+.demographics-container,
+.questionnaire-container {
+    min-height: 25vh;
+    .error-message {
+        margin-top: 16px;
+    }
+}
+.questionnaire-list {
+    margin-top: 8px;
+    .MuiExpansionPanelDetails-root {
+        padding: 8px 24px 12px !important;
+    }
+}
+.questionnaire-detail-summary {
+    display: block !important;
+}
+.questionnaire-details-container {
+    padding: 12px;
+    margin-top: 8px;
+    padding-bottom: 24px;
+    border: 1px solid @muterColor;
+    box-shadow: 1px 1px 2px @muterColor;
+    .MuiCollapse-wrapperInner {
+        margin-top: -12px !important;
+    }
+    .content {
+        font-size: 16px;
+    }
+}
+.question-text {
+    margin-right: 12px;
+    display: inline-block;
+    color: @mutedColor;
+}
+.profile-tabs-container {
+    margin-top: 16px;
+}
+.profile-footer {
+    margin-left: 24px;
+    margin-top: 8px;
+    margin-bottom: 32px;
+}
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);

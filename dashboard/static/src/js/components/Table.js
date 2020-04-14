@@ -1,9 +1,11 @@
-import React from "react";
+import React, {Component} from "react";
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
 import {sendRequest, dateFormat} from './Utility';
+import Error from './Error';
+import Profile from './Profile';
 
-export default class Table extends React.Component {
+export default class Table extends Component {
    constructor() {
       super();
       this.state = {
@@ -12,10 +14,14 @@ export default class Table extends React.Component {
         pages: 0,
         total: 0,
         hasError: false,
-        errorMessage: ""
+        errorMessage: "",
+        currentPatient: {}
       };
   }
   componentDidMount() {
+    this.getData();
+  }
+  getData() {
     sendRequest("./Patient").then(response => {
       let rawData = {};
       if (response) {
@@ -61,12 +67,13 @@ export default class Table extends React.Component {
       const cellClass = "mdc-data-table__cell";
       return (
               <div className="accountsList">
-                <h2>Accounts List <span className="count">({this.state.total + ' entries'})</span></h2>
+                <h2>Accounts List <span className="count">({`${this.state.total} entries`})</span></h2>
                 <div className={`tableWrapper ${loadingClass}`}>
                   <div className={`loading ${loadingClass?'':'hide'}`}>
                     <div className="loader"></div>
                   </div>
-                  <div className={`error-message ${this.state.hasError?'show':'hide'}`}>{this.state.errorMessage}</div>
+                  <Error message={this.state.errorMessage} className={`error-message ${this.state.hasError?'show':'hide'}`}></Error>
+                  <Profile info={this.state.currentPatient}></Profile>
                   <ReactTable
                       data={this.state.data}
                       columns={[
@@ -75,7 +82,7 @@ export default class Table extends React.Component {
                               accessor: "id",
                               sortable: true,
                               className: `${cellClass}`,
-                              maxWidth: 80,
+                              maxWidth: 92,
                               sortMethod: (a, b) => {
                                 if (a == b) {
                                   return 0;
@@ -102,6 +109,12 @@ export default class Table extends React.Component {
                               className: `${cellClass}`
                             }
                           ]}
+                          defaultSorted={[
+                            {
+                              id: "id",
+                              asc: true
+                            }
+                          ]}
                           showPagination={true}
                           showPaginationTop={false}
                           showPaginationBottom={true}
@@ -115,6 +128,22 @@ export default class Table extends React.Component {
                             height: "67.5vh" // This will force the table body to overflow and scroll, since there is not enough room
                           }}
                           className="mdc-data-table__table -striped -highlight"
+                          getTdProps={(state, rowInfo, column, instance) => {
+                            return {
+                              onClick: (e, handleOriginal) => {
+                                //debugging
+                                // console.log("state ", state)
+                                // console.log('A Td Element was clicked!')
+                                // console.log('it produced this event:', e)
+                                // console.log('It was in this column:', column)
+                                // console.log('It was in this row:', rowInfo)
+                                // console.log('row detail: ', rowInfo.row, ' id:', rowInfo.row.id, ' email:', rowInfo.row.email)
+                                // console.log('It was in this table instance:', instance)
+                                this.setState({currentPatient: rowInfo.row});
+                                document.querySelector("#profilePlaceholderButton").click();
+                              }
+                            }
+                          }}
                           getTheadThProps={(state,rowInfo,column,instance) => {
                             return {
                                 tabIndex: 0,
