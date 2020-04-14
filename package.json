@@ -12,7 +12,8 @@
     "report": "npm run build && webpack --profile --json > report.json && webpack-bundle-analyzer report.json  ./dashboard/static/js  -m static"
   },
   "dependencies": {
-    "@babel/core": "7.2.2",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "7.0.0",
     "@material-ui/core": "^4.9.8",
     "@material-ui/icons": "^4.9.1",
