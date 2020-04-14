@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import PropTypes from 'prop-types';
 import Divider from '@material-ui/core/Divider';
 import InputLabel from '@material-ui/core/InputLabel';
 import Error from './Error';
@@ -87,3 +88,6 @@ export default class CarePlan extends Component {
         );
     }
 }
+CarePlan.propTypes = {
+  userId: PropTypes.string.isRequired
+};

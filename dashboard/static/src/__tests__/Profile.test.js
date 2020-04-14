@@ -6,9 +6,10 @@ describe('Profile', () => {
   it('Profile render without crashing', () => {
     const info = {
         "name": "Test",
-        "email": "abc@email.com"
+        "email": "abc@email.com",
+        "id": "1"
     };
-    const wrapper = shallow(<Profile info={{info}}/>);
+    const wrapper = shallow(<Profile info={info}/>);
     expect(wrapper.find('#profileDiaglog').exists()).toBe(true);
   });
 });

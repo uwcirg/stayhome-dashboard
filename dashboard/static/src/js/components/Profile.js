@@ -92,8 +92,8 @@ export default function ProfileDialog(props) {
             <Tab label="Questionnaires" />
           </Tabs>
         </Paper>
-        <TabPanel value={tabValue} index={0} children={<Demographics info={info}></Demographics>} />
-        <TabPanel value={tabValue} index={1} children={<CarePlan userId={info.id} />} />
+        <TabPanel value={tabValue} index={0}><Demographics info={info}></Demographics></TabPanel>
+        <TabPanel value={tabValue} index={1}><CarePlan userId={info.id || "0"} /></TabPanel>
         <Box className="profile-footer" children={<Button variant="outlined" onClick={handleClose}>Back to Accounts List</Button>}></Box>
       </Dialog>
     </div>
