@@ -15,11 +15,20 @@ export default class Questionnaire extends Component {
             questions: [],
             answers: [],
             loading: true,
-            errorMessage: "",
-            mounted: false
+            errorMessage: ""
         };
+        this.__mounted = false;
+    }
+    componentWillUnmount() {
+      this.__mounted = false;
+    }
+    setCurrentState(data) {
+      if (this.__mounted && data) {
+        this.setState(data);
+      }
     }
     componentDidMount() {
+        this.__mounted = true;
         sendRequest(`./QuestionnaireResponse?based-on=${this.props.carePlanId}&_include=QuestionnaireResponse:questionnaire`).then(response => {
           let rawData = {};
           if (response) {
@@ -27,12 +36,13 @@ export default class Questionnaire extends Component {
               rawData = JSON.parse(response);
             } catch(e) {
               console.log("error parsing response! ", e);
-              rawData = null;
+              this.setCurrentState({loading: false, errorMessage: e});
+              return;
             }
             
           }
           if (!rawData || !rawData.entry || !rawData.entry.length) {
-            this.setState({loading: false});
+            this.setCurrentState({loading: false});
             return false;
           }
           let dataSet = {"questions": [], "answers": []};
@@ -63,11 +73,11 @@ export default class Questionnaire extends Component {
                 dataSet["questions"].push(qItem);
               }
           });
-          this.setState({questions: dataSet["questions"], answers: dataSet["answers"],loading: false, errorMessage: "", mounted: true});
+          this.setCurrentState({questions: dataSet["questions"], answers: dataSet["answers"],loading: false, errorMessage: ""});
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
-          this.setState({loading: false, errorMessage: errorMessage, mounted: false});
+          this.setCurrentState({loading: false, errorMessage: errorMessage});
         });
     }
     render() {

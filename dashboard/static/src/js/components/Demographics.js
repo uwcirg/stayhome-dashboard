@@ -11,20 +11,29 @@ export default class Demographics extends Component {
         super(...arguments);
         this.state = {
             coreInfo: {},
-            errorMessage: "",
-            mounted: false,
+            errorMessage: ""
         };
+        this.__mounted = false;
+    }
+    componentWillUnmount() {
+        this.__mounted = false;
+    }
+    setCurrentState(data) {
+        if (this.__mounted && data) {
+            this.setState(data);
+        }
     }
     componentDidMount() {
-        sendRequest("./Patient/"+this.props.info.id).then(response => {
+        this.__mounted = true;
+        sendRequest(`./Patient/${this.props.info.id}`).then(response => {
           let rawData = {};
           if (response) {
             try {
                 rawData = JSON.parse(response);
             } catch(e) {
                 console.log("Error parsing questionnaire json: ", e);
-                this.setState({errorMessage: `Error retrieving demographics data: ${e}`, mounted: false});
-                rawData = null;
+                this.setCurrentState({errorMessage: `Error retrieving demographics data: ${e}`});
+                return;
             }
           }
           if (!rawData) {
@@ -51,11 +60,11 @@ export default class Demographics extends Component {
                 dataSet["Secondary_zipcode"] = secondaryAddress[0].postalCode;
               }
           }
-          this.setState({coreInfo: dataSet, errorMessage: "", mounted: true});
+          this.setCurrentState({coreInfo: dataSet, errorMessage: ""});
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
-          this.setState({errorMessage: `Error retrieving demographics data: ${errorMessage}`, mounted: false});
+          this.setCurrentState({errorMessage: `Error retrieving demographics data: ${errorMessage}`});
         });
       }
     renderProfileLabel(label) {
