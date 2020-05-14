@@ -5,7 +5,7 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-    entry:  path.join(__dirname, '/dashboard/static/src/js/Index.js'),
+    entry:  path.join(__dirname, '/dashboard/src/js/Index.js'),
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000
@@ -55,8 +55,9 @@ const config = {
     plugins: [
       new HtmlWebpackPlugin({
         title: "StayHome Dashboard",
-        template: path.join(__dirname, '/dashboard/static/src/index.html'),
-        filename: path.join(__dirname, '/dashboard/templates/index.html')
+        template: path.join(__dirname, '/dashboard/src/index.html'),
+        filename: path.join(__dirname, '/dashboard/templates/index.html'),
+        favicon: path.join(__dirname, '/dashboard/src/assets/img/favicon.ico'),
       })
     ],
     optimization: {
