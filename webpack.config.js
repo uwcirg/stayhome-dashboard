@@ -4,7 +4,10 @@ const TerserWebpackPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const config = {
+module.exports = function(_env, argv) {
+  const isProduction = argv.mode === "production";
+  const isDevelopment = !isProduction;
+  return {
     entry:  path.join(__dirname, '/dashboard/src/js/Index.js'),
     watchOptions: {
       aggregateTimeout: 300,
@@ -45,7 +48,7 @@ const config = {
               {
                 loader: 'less-loader', // compiles Less to CSS
                 options: {
-                  sourceMap: false
+                  sourceMap: isDevelopment
                 },
               },
             ],
@@ -58,10 +61,15 @@ const config = {
         template: path.join(__dirname, '/dashboard/src/index.html'),
         filename: path.join(__dirname, '/dashboard/templates/index.html'),
         favicon: path.join(__dirname, '/dashboard/src/assets/img/favicon.ico'),
+      }),
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify(
+          isProduction ? "production" : "development"
+        )
       })
     ],
     optimization: {
-      minimize: true,
+      minimize: isProduction,
       minimizer: [
         new TerserWebpackPlugin({
           terserOptions: {
@@ -102,6 +110,6 @@ const config = {
         }
       }
     }
-};
+  };
+}
 
-module.exports = config;
