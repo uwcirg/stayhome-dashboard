@@ -3,6 +3,7 @@ const path = require('path');
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 module.exports = function(_env, argv) {
   const isProduction = argv.mode === "production";
@@ -66,6 +67,22 @@ module.exports = function(_env, argv) {
         "process.env.NODE_ENV": JSON.stringify(
           isProduction ? "production" : "development"
         )
+      }),
+      new FileManagerPlugin({
+        onEnd: {
+          delete: [
+            path.join(__dirname, '/dashboard/dist')
+          ],
+          copy: [
+            { source: path.join(__dirname, '/dashboard/static/js/*.js'), destination: path.join(__dirname, '/dashboard/dist/js') },
+            { source: path.join(__dirname, '/dashboard/templates/index.html'), destination: path.join(__dirname, '/dashboard/dist/templates') },
+          ],
+          mkdir: [
+            path.join(__dirname, '/dashboard/dist'),
+            path.join(__dirname, '/dashboard/dist/js'),
+            path.join(__dirname, '/dashboard/dist/templates')
+          ]
+        }
       })
     ],
     optimization: {

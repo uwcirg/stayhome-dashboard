@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import PropTypes from 'prop-types';
-import Divider from '@material-ui/core/Divider';
 import InputLabel from '@material-ui/core/InputLabel';
 import Error from './Error';
 import Questionnaire from './Questionnaire';
@@ -70,7 +69,6 @@ export default class CarePlan extends Component {
           return (
             <section key={key}>
               <div className="title">{item.description}</div>
-              <Divider/>
               <div className="detail">
                 <InputLabel required={false} shrink={true} className="profile-label">Period</InputLabel>
                 <div>{`${item.period.start} - ${item.period.end}`}</div>

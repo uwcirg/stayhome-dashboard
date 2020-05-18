@@ -106,13 +106,25 @@ export default class Table extends Component {
                               Header: "Last Updated",
                               accessor: "lastUpdated",
                               sortable: true,
-                              className: `${cellClass}`
+                              className: `${cellClass}`,
+                              sortMethod: (a, b) => {
+                                if (a == null && b != null) {
+                                  return 1;
+                                } else if (a != null && b == null) {
+                                  return -1;
+                                } else if (a == null && b == null) {
+                                  return 0;
+                                }
+                                a = new Date(a).getTime();
+                                b = new Date(b).getTime();
+                                return b > a ? 1 : -1;
+                              }
                             }
                           ]}
                           defaultSorted={[
                             {
-                              id: "id",
-                              asc: true
+                              id: "lastUpdated",
+                              asc: false
                             }
                           ]}
                           showPagination={true}

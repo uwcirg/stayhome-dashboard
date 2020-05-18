@@ -246,6 +246,10 @@ a.cta {
     }
     .title {
         font-weight: 500;
+        padding-bottom: 4px;
+        margin-bottom: 4px;
+        display: inline-block;
+        border-bottom: 1px solid @muterColor;
     }
 }
 .questionnaire-panel {
@@ -281,6 +285,16 @@ a.cta {
     }
     .content {
         font-size: 16px;
+    }
+    .MuiExpansionPanelSummary-content {
+        margin: 16px;
+        &.Mui-expanded {
+            margin: 20px 16px;
+        }
+    }
+    .MuiIconButton-root {
+        position: absolute;
+        left: 0
     }
 }
 .question-text {
