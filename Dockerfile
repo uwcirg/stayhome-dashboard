@@ -17,9 +17,7 @@ RUN mkdir /opt/stayhome-dashboard
 WORKDIR /opt/stayhome-dashboard
 
 # Copy front-end files built in previous stage
-COPY --from=frontend /tmp/frontend/dashboard/static/ /opt/stayhome-dashboard/dashboard/static/
-# todo: move index.html to static files and use flask.send_from_directory
-COPY --from=frontend /tmp/frontend/dashboard/templates/ /opt/stayhome-dashboard/dashboard/templates/
+COPY --from=frontend /tmp/frontend/dashboard/dist/ /opt/stayhome-dashboard/dashboard/static/
 
 ENV FLASK_APP=dashboard:create_app
 
