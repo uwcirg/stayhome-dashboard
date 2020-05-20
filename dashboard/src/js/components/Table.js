@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
+import Box from '@material-ui/core/Box';
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
 import {sendRequest, dateFormat} from './Utility';
 import Error from './Error';
 import Profile from './Profile';
@@ -58,6 +61,11 @@ export default class Table extends Component {
       console.log("Failed ", errorMessage);
       if (error.status && error.status == 401) {
         errorMessage = "You are not yet authorized to use the Dashboard application. Contact the person responsible for granting your access permissions.";
+      }
+      if (error.status && error.status == 302) {
+        console.log("status location changed?")
+        window.location = "/logout";
+        return;
       }
       this.setState({loading: false, hasError: true, errorMessage: errorMessage});
     });
@@ -168,6 +176,16 @@ export default class Table extends Component {
                             };
                         }}
                   />
+                  { !this.state.hasError &&
+                    !this.state.loading &&
+                    <Box pt={2}>
+                          <Typography variant="body2" color="textSecondary" align="right">
+                              <Link color="inherit" href="/Patient" target="_blank" rel="noreferrer" className="muted">
+                                  View Raw Source
+                              </Link>
+                          </Typography>
+                    </Box>
+                  }
                 </div>
             </div>
       );

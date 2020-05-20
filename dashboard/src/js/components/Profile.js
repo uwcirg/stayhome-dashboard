@@ -45,7 +45,6 @@ function TabPanel(props) {
 }
 
 export default function ProfileDialog(props) {
-
   const [open, setOpen] = React.useState(false);
   const [tabValue, setTabValue] = React.useState(0);
   const classes = useStyles();
