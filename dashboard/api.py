@@ -7,6 +7,8 @@ from flask import (
     redirect,
     render_template,
     request,
+    safe_join,
+    send_from_directory,
 )
 import requests
 
@@ -24,8 +26,12 @@ def main(methods=["GET"]):
     token = oidc.get_access_token()
     if token is None or not oidc.validate_token(token):
         return redirect('logout')
-    # todo use send_from_directory
-    return render_template('index.html')
+
+    return send_from_directory(
+        # todo: remove templates directory reference; index.html isn't a jinja template
+        safe_join(current_app.static_folder, 'templates'),
+        'index.html'
+    )
 
 
 @api_blueprint.route('/<string:resource_type>', methods=["GET"])
