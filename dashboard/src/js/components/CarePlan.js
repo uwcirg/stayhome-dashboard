@@ -32,7 +32,7 @@ export default class CarePlan extends Component {
             rawData = JSON.parse(response);
           } catch(e) {
             console.log("error parsing response! ", e);
-            this.setCurrentState({loading: false, errorMessage: e});
+            this.setCurrentState({loading: false, errorMessage: `Error retrieving care plan data: ${e} <a href="/">Refresh</a>`});
             return false;
           }
           

@@ -33,7 +33,7 @@ export default class Demographics extends Component {
                 rawData = JSON.parse(response);
             } catch(e) {
                 console.log("Error parsing questionnaire json: ", e);
-                this.setCurrentState({errorMessage: `Error retrieving demographics data: ${e}`, loading: false});
+                this.setCurrentState({errorMessage: `Error retrieving demographics data: ${e}; <a href="/">Refresh</a>`, loading: false});
                 return;
             }
           }
