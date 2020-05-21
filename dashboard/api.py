@@ -3,8 +3,7 @@ from flask import (
     abort,
     current_app,
     jsonify,
-    redirect,
-    render_template,
+    make_response,
     request,
     safe_join,
     send_from_directory,
@@ -40,10 +39,15 @@ def validate_auth():
 
     :returns: access token, if valid
     """
-    token = oidc.get_access_token()
-    if token is None or not oidc.validate_token(token):
+    try:
+        token = oidc.get_access_token()
+    except TypeError:
+        # raised when the token isn't accessible to the oidc lib
+        raise Unauthorized("missing auth token")
+
+    if not oidc.validate_token(token):
         terminate_session()
-        raise Unauthorized("invalid or missing auth token")
+        raise Unauthorized("invalid auth token")
     return token
 
 
@@ -61,7 +65,7 @@ def main(methods=["GET"]):
 
 
 @api_blueprint.route('/<string:resource_type>', methods=["GET"])
-@oidc.require_login
+#@oidc.require_login
 def resource_bundle(resource_type, methods=["GET"]):
     """Query HAPI for resource_type and return as JSON FHIR Bundle
 
@@ -85,7 +89,7 @@ def resource_bundle(resource_type, methods=["GET"]):
 
 @api_blueprint.route(
     '/<string:resource_type>/<int:resource_id>', methods=["GET"])
-@oidc.require_login
+#@oidc.require_login
 def resource_by_id(resource_type, resource_id, methods=["GET"]):
     """Query HAPI for individual resource; return JSON FHIR Resource
     """
@@ -103,4 +107,5 @@ def resource_by_id(resource_type, resource_id, methods=["GET"]):
 @api_blueprint.route('/logout', methods=["GET"])
 def logout(methods=["GET"]):
     terminate_session()
-    return redirect("main")
+    message = 'Logged out.  Return to <a href="/">Stayhome Dashboard</a>'
+    return make_response(message)
