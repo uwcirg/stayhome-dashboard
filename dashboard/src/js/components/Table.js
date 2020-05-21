@@ -1,6 +1,9 @@
 import React, {Component} from "react";
 import ReactTable from 'react-table-6';
 import 'react-table-6/react-table.css';
+import Box from '@material-ui/core/Box';
+import Link from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
 import {sendRequest, dateFormat} from './Utility';
 import Error from './Error';
 import Profile from './Profile';
@@ -106,13 +109,25 @@ export default class Table extends Component {
                               Header: "Last Updated",
                               accessor: "lastUpdated",
                               sortable: true,
-                              className: `${cellClass}`
+                              className: `${cellClass}`,
+                              sortMethod: (a, b) => {
+                                if (a == null && b != null) {
+                                  return 1;
+                                } else if (a != null && b == null) {
+                                  return -1;
+                                } else if (a == null && b == null) {
+                                  return 0;
+                                }
+                                a = new Date(a).getTime();
+                                b = new Date(b).getTime();
+                                return b > a ? 1 : -1;
+                              }
                             }
                           ]}
                           defaultSorted={[
                             {
-                              id: "id",
-                              asc: true
+                              id: "lastUpdated",
+                              asc: false
                             }
                           ]}
                           showPagination={true}
@@ -156,6 +171,16 @@ export default class Table extends Component {
                             };
                         }}
                   />
+                  { !this.state.hasError &&
+                    !this.state.loading &&
+                    <Box pt={2}>
+                          <Typography variant="body2" color="textSecondary" align="right">
+                              <Link color="inherit" href="/Patient" target="_blank" rel="noreferrer" className="muted">
+                                  View Raw Source
+                              </Link>
+                          </Typography>
+                    </Box>
+                  }
                 </div>
             </div>
       );

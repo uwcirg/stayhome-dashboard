@@ -43,7 +43,7 @@ export default class Questionnaire extends Component {
               rawData = JSON.parse(response);
             } catch(e) {
               console.log("error parsing response! ", e);
-              this.setCurrentState({loading: false, errorMessage: e});
+              this.setCurrentState({loading: false, errorMessage: `Error retrieving questionnaire data: ${e} <a href="/">Refresh</a>`});
               return;
             }
             
@@ -84,6 +84,12 @@ export default class Questionnaire extends Component {
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
+          //unauthorized error
+          if (error.status && error.status == 401) {
+            console.log("Failed: Unauthorized ", errorMessage);
+            window.location = "/";
+            return;
+          }
           this.setCurrentState({loading: false, errorMessage: errorMessage});
         });
     }

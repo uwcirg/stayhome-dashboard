@@ -1,4 +1,5 @@
 import React from 'react';
+import renderHTML from 'react-render-html';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -21,7 +22,8 @@ export default function ErrorMessage(props) {
   return (
     <div className={classes.root, props.className}>
       <Alert severity="error">
-        {props.message}
+        {props.message && renderHTML(props.message)}
+        {!props.message && "Application error occurred."}
       </Alert>
     </div>
   );

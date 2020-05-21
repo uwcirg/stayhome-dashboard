@@ -3,9 +3,14 @@ const path = require('path');
 const TerserWebpackPlugin = require("terser-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
-const config = {
-    entry:  path.join(__dirname, '/dashboard/static/src/js/Index.js'),
+module.exports = function(_env, argv) {
+  const isProduction = argv.mode === "production";
+  const isDevelopment = !isProduction;
+  
+  return {
+    entry:  path.join(__dirname, '/dashboard/src/js/Index.js'),
     watchOptions: {
       aggregateTimeout: 300,
       poll: 1000
@@ -13,6 +18,7 @@ const config = {
     output: {
       path: path.join(__dirname, '/dashboard/static/js/'),
       filename: 'app.bundle.js',
+      publicPath: "/static/js/"
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css']
@@ -45,7 +51,7 @@ const config = {
               {
                 loader: 'less-loader', // compiles Less to CSS
                 options: {
-                  sourceMap: false
+                  sourceMap: isDevelopment
                 },
               },
             ],
@@ -55,12 +61,34 @@ const config = {
     plugins: [
       new HtmlWebpackPlugin({
         title: "StayHome Dashboard",
-        template: path.join(__dirname, '/dashboard/static/src/index.html'),
-        filename: path.join(__dirname, '/dashboard/templates/index.html')
+        template: path.join(__dirname, '/dashboard/src/index.html'),
+        filename: path.join(__dirname, '/dashboard/static/templates/index.html'),
+        favicon: path.join(__dirname, '/dashboard/src/assets/img/favicon.ico'),
+      }),
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify(
+          isProduction ? "production" : "development"
+        )
+      }),
+      new FileManagerPlugin({
+        onEnd: {
+          delete: [
+            path.join(__dirname, '/dashboard/dist')
+          ],
+          copy: [
+            { source: path.join(__dirname, '/dashboard/static/js/*.js'), destination: path.join(__dirname, '/dashboard/dist/js') },
+            { source: path.join(__dirname, '/dashboard/static/templates/index.html'), destination: path.join(__dirname, '/dashboard/dist/templates') },
+          ],
+          mkdir: [
+            path.join(__dirname, '/dashboard/dist'),
+            path.join(__dirname, '/dashboard/dist/js'),
+            path.join(__dirname, '/dashboard/dist/templates')
+          ]
+        }
       })
     ],
     optimization: {
-      minimize: true,
+      minimize: isProduction,
       minimizer: [
         new TerserWebpackPlugin({
           terserOptions: {
@@ -101,6 +129,5 @@ const config = {
         }
       }
     }
-};
-
-module.exports = config;
+  };
+}

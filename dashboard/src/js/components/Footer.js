@@ -10,19 +10,10 @@ export default class Footer extends Component {
       return (
         <Container maxWidth="lg" id="footerContainer">
             <Grid container spacing={3}>
-                <Grid item xs={12} md={6} lg={6}>
+                <Grid item xs={12} md={12} lg={12}>
                     <Box pt={4}>
                         <Typography variant="body2" color="textSecondary" align="center">
-                            <Link color="inherit" href="/Patient" target="_blank" rel="noreferrer" className="cta">
-                                View Raw Source
-                            </Link>
-                        </Typography>
-                    </Box>
-                </Grid>
-                <Grid item xs={12} md={6} lg={6}>
-                    <Box pt={4}>
-                        <Typography variant="body2" color="textSecondary" align="center">
-                            Created by &nbsp;
+                            © Created by &nbsp;
                             <Link color="inherit" href="https://cirg.washington.edu/" target="_blank" rel="noreferrer" className="cta">
                                 Clinical Informatics Research Group
                             </Link>
@@ -30,6 +21,7 @@ export default class Footer extends Component {
                             {' '}
                             {new Date().getFullYear()}
                             {'.'}
+                            &nbsp; All rights reserved.
                         </Typography>
                     </Box>
                 </Grid>

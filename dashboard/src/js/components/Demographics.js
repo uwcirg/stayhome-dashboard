@@ -11,7 +11,8 @@ export default class Demographics extends Component {
         super(...arguments);
         this.state = {
             coreInfo: {},
-            errorMessage: ""
+            errorMessage: "",
+            loading: true
         };
         this.__mounted = false;
     }
@@ -32,11 +33,12 @@ export default class Demographics extends Component {
                 rawData = JSON.parse(response);
             } catch(e) {
                 console.log("Error parsing questionnaire json: ", e);
-                this.setCurrentState({errorMessage: `Error retrieving demographics data: ${e}`});
+                this.setCurrentState({errorMessage: `Error retrieving demographics data: ${e}; <a href="/">Refresh</a>`, loading: false});
                 return;
             }
           }
           if (!rawData) {
+            this.setCurrentState({errorMessage: `Error retrieving demographics data: no data returned`, loading: false});
               return false;
           }
           let dataSet = {};
@@ -60,11 +62,17 @@ export default class Demographics extends Component {
                 dataSet["Secondary_zipcode"] = secondaryAddress[0].postalCode;
               }
           }
-          this.setCurrentState({coreInfo: dataSet, errorMessage: ""});
+          this.setCurrentState({coreInfo: dataSet, errorMessage: "", loading: false});
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
-          this.setCurrentState({errorMessage: `Error retrieving demographics data: ${errorMessage}`});
+          //unauthorized error
+          if (error.status && error.status == 401) {
+            console.log("Failed: Unauthorized ", errorMessage);
+            window.location = "/";
+            return;
+          }
+          this.setCurrentState({errorMessage: `Error retrieving demographics data: ${errorMessage}`, loading: false});
         });
       }
     renderProfileLabel(label) {
@@ -77,6 +85,9 @@ export default class Demographics extends Component {
         const {info} = this.props;
         return (
             <div className="demographics-container">
+                <div className={this.state.loading?"loading":"hide"}>
+                    <div className="loader"></div>
+                </div>
                 {this.renderProfileLabel("Name")}
                 {this.renderProfileText(info.name?info.name:"")}
                 <Divider/>
@@ -96,7 +107,10 @@ export default class Demographics extends Component {
                         )
                     })
                 }
-                <Error message={this.state.errorMessage} className={`error-message ${this.state.errorMessage?'show':'hide'}`}></Error>
+                {
+                    !this.state.loading &&
+                    <Error message={this.state.errorMessage} className={`error-message ${this.state.errorMessage?'show':'hide'}`}></Error>
+                }
             </div>
         );
     }
