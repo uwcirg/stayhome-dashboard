@@ -18,6 +18,7 @@ module.exports = function(_env, argv) {
     output: {
       path: path.join(__dirname, '/dashboard/static/js/'),
       filename: 'app.bundle.js',
+      publicPath: "/static/js/"
     },
     resolve: {
         extensions: ['.js', '.jsx', '.css']
@@ -61,7 +62,7 @@ module.exports = function(_env, argv) {
       new HtmlWebpackPlugin({
         title: "StayHome Dashboard",
         template: path.join(__dirname, '/dashboard/src/index.html'),
-        filename: path.join(__dirname, '/dashboard/templates/index.html'),
+        filename: path.join(__dirname, '/dashboard/static/templates/index.html'),
         favicon: path.join(__dirname, '/dashboard/src/assets/img/favicon.ico'),
       }),
       new webpack.DefinePlugin({
@@ -76,7 +77,7 @@ module.exports = function(_env, argv) {
           ],
           copy: [
             { source: path.join(__dirname, '/dashboard/static/js/*.js'), destination: path.join(__dirname, '/dashboard/dist/js') },
-            { source: path.join(__dirname, '/dashboard/templates/index.html'), destination: path.join(__dirname, '/dashboard/dist/templates') },
+            { source: path.join(__dirname, '/dashboard/static/templates/index.html'), destination: path.join(__dirname, '/dashboard/dist/templates') },
           ],
           mkdir: [
             path.join(__dirname, '/dashboard/dist'),
