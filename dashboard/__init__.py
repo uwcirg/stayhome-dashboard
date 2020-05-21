@@ -13,6 +13,10 @@ def create_app(testing=False):
         app.config['SECRET_KEY'] = 'nonsense-testing-key'
         app.config['TESTING'] = True
 
+    # Confirm presence of SECRET_KEY, or nonsense errors will burn hours
+    if not app.config['SECRET_KEY']:
+        raise RuntimeError("SECRET_KEY not defined; can't continue")
+
     oidc.init_app(app)
     app.register_blueprint(api_blueprint)
     return app
