@@ -3,7 +3,6 @@ from flask import (
     abort,
     current_app,
     jsonify,
-    make_response,
     redirect,
     render_template,
     request,
@@ -11,6 +10,7 @@ from flask import (
     send_from_directory,
 )
 import requests
+from werkzeug.exceptions import Unauthorized
 
 from dashboard.bearer_auth import BearerAuth
 from dashboard.extensions import oidc
@@ -19,14 +19,39 @@ from dashboard.extensions import oidc
 api_blueprint = Blueprint('dashboard-api', __name__)
 
 
+def terminate_session():
+    """Terminate logged in session; logout without response"""
+    token = oidc.user_loggedin and oidc.get_access_token()
+    if token and oidc.validate_token(token):
+        # Direct POST to Keycloak necessary to clear KC domain browser cookie
+        logout_uri = oidc.client_secrets['userinfo_uri'].replace(
+            'userinfo', 'logout')
+        data = {
+            'client_id': oidc.client_secrets['client_id'],
+            'client_secret': oidc.client_secrets['client_secret'],
+            'refresh_token': oidc.get_refresh_token()}
+        requests.post(logout_uri, auth=BearerAuth(token), data=data)
+
+    oidc.logout()  # clears local cookie only
+
+
+def validate_auth():
+    """Verify state of auth token, raise 401 if inadequate
+
+    :returns: access token, if valid
+    """
+    token = oidc.get_access_token()
+    if token is None or not oidc.validate_token(token):
+        terminate_session()
+        raise Unauthorized("invalid or missing auth token")
+    return token
+
+
 @api_blueprint.route('/', methods=["GET"])
 @oidc.require_login
 def main(methods=["GET"]):
     """ Main route, entry point for react. """
-    token = oidc.get_access_token()
-    if token is None or not oidc.validate_token(token):
-        return redirect('logout')
-
+    validate_auth()
     return send_from_directory(
         # todo: remove templates directory reference; index.html isn't a jinja template
         safe_join(current_app.static_folder, 'templates'),
@@ -44,10 +69,7 @@ def resource_bundle(resource_type, methods=["GET"]):
       as additional search criteria.  Example: /CarePlan?subject=Patient/8
 
     """
-    token = oidc.get_access_token()
-    if token is None or not oidc.validate_token(token):
-        return redirect('logout')
-
+    token = validate_auth()
     url = current_app.config.get('MAP_API') + resource_type
     params = {'_count': 1000}
     params.update(request.args)
@@ -66,10 +88,7 @@ def resource_bundle(resource_type, methods=["GET"]):
 def resource_by_id(resource_type, resource_id, methods=["GET"]):
     """Query HAPI for individual resource; return JSON FHIR Resource
     """
-    token = oidc.get_access_token()
-    if token is None or not oidc.validate_token(token):
-        return redirect('logout')
-
+    token = validate_auth()
     url = f"{current_app.config.get('MAP_API')}{resource_type}/{resource_id}"
     resp = requests.get(url, auth=BearerAuth(token))
     try:
@@ -82,19 +101,5 @@ def resource_by_id(resource_type, resource_id, methods=["GET"]):
 
 @api_blueprint.route('/logout', methods=["GET"])
 def logout(methods=["GET"]):
-    token = oidc.user_loggedin and oidc.get_access_token()
-    if token and oidc.validate_token(token):
-        # Direct POST to Keycloak necessary to clear KC domain browser cookie
-        logout_uri = oidc.client_secrets['userinfo_uri'].replace(
-            'userinfo', 'logout')
-        data = {
-            'client_id': oidc.client_secrets['client_id'],
-            'client_secret': oidc.client_secrets['client_secret'],
-            'refresh_token': oidc.get_refresh_token()}
-        result = requests.post(logout_uri, auth=BearerAuth(token), data=data)
-        result.raise_for_status()
-
-    oidc.logout()  # clears local cookie only
-
-    message = 'Logged out.  Return to <a href="/">Stayhome Dashboard</a>'
-    return make_response(message)
+    terminate_session()
+    return redirect("main")
