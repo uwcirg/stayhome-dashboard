@@ -62,11 +62,6 @@ export default class Table extends Component {
       if (error.status && error.status == 401) {
         errorMessage = "You are not yet authorized to use the Dashboard application. Contact the person responsible for granting your access permissions.";
       }
-      if (error.status && error.status == 302) {
-        console.log("status location changed?")
-        window.location = "/logout";
-        return;
-      }
       this.setState({loading: false, hasError: true, errorMessage: errorMessage});
     });
   }
