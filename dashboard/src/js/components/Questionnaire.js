@@ -84,6 +84,11 @@ export default class Questionnaire extends Component {
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
+          //unauthorized error
+          if (error.status && error.status == 401) {
+            window.location = "/";
+            return;
+          }
           this.setCurrentState({loading: false, errorMessage: errorMessage});
         });
     }

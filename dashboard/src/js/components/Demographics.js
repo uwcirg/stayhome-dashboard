@@ -66,6 +66,11 @@ export default class Demographics extends Component {
         }, error => {
           let errorMessage = error.statusText ? error.statusText: error;
           console.log("Failed ", errorMessage);
+          //unauthorized error
+          if (error.status && error.status == 401) {
+            window.location = "/";
+            return;
+          }
           this.setCurrentState({errorMessage: `Error retrieving demographics data: ${errorMessage}`, loading: false});
         });
       }

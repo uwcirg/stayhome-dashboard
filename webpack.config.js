@@ -8,6 +8,7 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 module.exports = function(_env, argv) {
   const isProduction = argv.mode === "production";
   const isDevelopment = !isProduction;
+  
   return {
     entry:  path.join(__dirname, '/dashboard/src/js/Index.js'),
     watchOptions: {
@@ -129,4 +130,3 @@ module.exports = function(_env, argv) {
     }
   };
 }
-
