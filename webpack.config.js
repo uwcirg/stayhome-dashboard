@@ -8,6 +8,12 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 module.exports = function(_env, argv) {
   const isProduction = argv.mode === "production";
   const isDevelopment = !isProduction;
+  /*
+   * output to static file for ease of development
+   */
+  const outputDirectory = isDevelopment?"/dashboard/static":"/dashboard/dist";
+  const jsDirectory = `${outputDirectory}/js`;
+  const templateDirectory = `${outputDirectory}/templates`;
   
   return {
     entry:  path.join(__dirname, '/dashboard/src/js/Index.js'),
@@ -16,7 +22,7 @@ module.exports = function(_env, argv) {
       poll: 1000
     },
     output: {
-      path: path.join(__dirname, '/dashboard/static/js/'),
+      path: path.join(__dirname, jsDirectory),
       filename: 'app.bundle.js',
       publicPath: "/static/js/"
     },
@@ -62,7 +68,7 @@ module.exports = function(_env, argv) {
       new HtmlWebpackPlugin({
         title: "StayHome Dashboard",
         template: path.join(__dirname, '/dashboard/src/index.html'),
-        filename: path.join(__dirname, '/dashboard/static/templates/index.html'),
+        filename: path.join(__dirname, `${templateDirectory}/index.html`),
         favicon: path.join(__dirname, '/dashboard/src/assets/img/favicon.ico'),
       }),
       new webpack.DefinePlugin({
@@ -71,18 +77,9 @@ module.exports = function(_env, argv) {
         )
       }),
       new FileManagerPlugin({
-        onEnd: {
+        onStart: {
           delete: [
             path.join(__dirname, '/dashboard/dist')
-          ],
-          copy: [
-            { source: path.join(__dirname, '/dashboard/static/js/*.js'), destination: path.join(__dirname, '/dashboard/dist/js') },
-            { source: path.join(__dirname, '/dashboard/static/templates/index.html'), destination: path.join(__dirname, '/dashboard/dist/templates') },
-          ],
-          mkdir: [
-            path.join(__dirname, '/dashboard/dist'),
-            path.join(__dirname, '/dashboard/dist/js'),
-            path.join(__dirname, '/dashboard/dist/templates')
           ]
         }
       })
