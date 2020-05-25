@@ -34,15 +34,9 @@ export default function TimeoutModal(props) {
   const [open, setOpen] = React.useState(false);
   const trackInterval = 15000;
 
-
   const clearExpiredIntervalId = () => {
     clearInterval(expiredIntervalId);
   };
-
-  const handleSessionValidityError = () => {
-    clearExpiredIntervalId();
-    //window.location = "/";
-  }
 
   const checkSessionValidity = () => {
     /*
@@ -68,12 +62,11 @@ export default function TimeoutModal(props) {
           if (Math.floor(tokenData["expires_in"]) <= 60) {
             cleanUpModal();
             if (!open) handleOpen();
-      
           }
  
         } catch(e) {
           console.log(`Error occurred parsing token data ${e}`);
-          handleSessionValidityError();
+          clearExpiredIntervalId();
           return;
         }
 
@@ -85,7 +78,7 @@ export default function TimeoutModal(props) {
         handleLogout();
         return;
       }
-      handleSessionValidityError();
+      clearExpiredIntervalId();
       console.log("Failed to retrieve token data", error.statusText);
     });
   };
@@ -104,7 +97,9 @@ export default function TimeoutModal(props) {
 
   const handleLogout = () => {
     clearExpiredIntervalId();
-    window.location = "/logout";
+    setTimeout(() => {
+      window.location = "/logout";
+    }, 0);
     return false;
   }
 
