@@ -3,6 +3,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Header from "./components/Header";
 import Table from "./components/Table";
 import Footer from "./components/Footer";
+import TimeoutModal from "./components/TimeoutModal";
 import "../less/index.less";
 
 export default class App extends React.Component {
@@ -13,7 +14,8 @@ export default class App extends React.Component {
         <div className="landing">
             <Header />
             <Table />
-            <Footer /> 
+            <Footer />
+            <TimeoutModal />
         </div>
       </React.Fragment>
     );

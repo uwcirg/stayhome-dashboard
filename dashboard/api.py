@@ -1,10 +1,10 @@
+from datetime import datetime
 from flask import (
     Blueprint,
     abort,
     current_app,
     jsonify,
-    redirect,
-    render_template,
+    make_response,
     request,
     safe_join,
     send_from_directory,
@@ -40,10 +40,15 @@ def validate_auth():
 
     :returns: access token, if valid
     """
-    token = oidc.get_access_token()
-    if token is None or not oidc.validate_token(token):
+    try:
+        token = oidc.get_access_token()
+    except TypeError:
+        # raised when the token isn't accessible to the oidc lib
+        raise Unauthorized("missing auth token")
+
+    if not oidc.validate_token(token):
         terminate_session()
-        raise Unauthorized("invalid or missing auth token")
+        raise Unauthorized("invalid auth token")
     return token
 
 
@@ -56,14 +61,32 @@ def main(methods=["GET"]):
     return send_from_directory(
         #todo: remove templates directory reference; index.html isn't a jinja template
         safe_join(current_app.static_folder, 'templates'),
-        'index.html'
+        'index.html',
+        cache_timeout=-1
     )
 
 
+@api_blueprint.route('/validate_token', methods=["GET"])
+def validate_token():
+    """API to confirm header token is still valid
+
+    :returns: JSON with `valid` and `expires_in` (seconds) filled in
+    """
+    try:
+        token = validate_auth()
+    except Unauthorized:
+        return jsonify(valid=False, expires_in=0)
+    expires = oidc.user_getfield('exp')
+    delta = expires - datetime.now().timestamp()
+    return jsonify(valid=True, expires_in=delta)
+
+
 @api_blueprint.route('/<string:resource_type>', methods=["GET"])
-@oidc.require_login
 def resource_bundle(resource_type, methods=["GET"]):
     """Query HAPI for resource_type and return as JSON FHIR Bundle
+
+    NB not decorated with `@oidc.require_login` as that does an implicit
+    redirect.  Client should watch for 401 and redirect appropriately.
 
     :param resource_type: The FHIR Resource type, i.e. `Patient` or `CarePlan`
     :param search criteria: Include query string arguments to pass to HAPI
@@ -85,9 +108,11 @@ def resource_bundle(resource_type, methods=["GET"]):
 
 @api_blueprint.route(
     '/<string:resource_type>/<int:resource_id>', methods=["GET"])
-@oidc.require_login
 def resource_by_id(resource_type, resource_id, methods=["GET"]):
     """Query HAPI for individual resource; return JSON FHIR Resource
+
+    NB not decorated with `@oidc.require_login` as that does an implicit
+    redirect.  Client should watch for 401 and redirect appropriately.
     """
     token = validate_auth()
     url = f"{current_app.config.get('MAP_API')}{resource_type}/{resource_id}"
@@ -103,4 +128,5 @@ def resource_by_id(resource_type, resource_id, methods=["GET"]):
 @api_blueprint.route('/logout', methods=["GET"])
 def logout(methods=["GET"]):
     terminate_session()
-    return redirect("main")
+    message = 'Logged out.  Return to <a href="/">Stayhome Dashboard</a>'
+    return make_response(message)

@@ -23,7 +23,10 @@ module.exports = function(_env, argv) {
     },
     output: {
       path: path.join(__dirname, jsDirectory),
-      filename: 'app.bundle.js',
+      /*
+       * create a new hash for each new build
+       */
+      filename: `app.bundle.[name]${isProduction?'-[hash:6]':''}.js`,
       publicPath: "/static/js/"
     },
     resolve: {
