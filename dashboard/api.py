@@ -61,7 +61,8 @@ def main(methods=["GET"]):
     return send_from_directory(
         #todo: remove templates directory reference; index.html isn't a jinja template
         safe_join(current_app.static_folder, 'templates'),
-        'index.html'
+        'index.html',
+        cache_timeout=-1
     )
 
 
